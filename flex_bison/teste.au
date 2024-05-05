@@ -1,0 +1,7 @@
+source cavalo = "cavalo.mp3";
+
+source cavalocavalo = cavalo * 2;
+
+source ca = cavalo from 0 to 1;
+
+play ca;

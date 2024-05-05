@@ -1,11 +1,19 @@
+%union {
+    int ival;
+    char *sval;
+}
+
 %{
 #include <stdio.h>
 #include <stdlib.h>
 extern int yylex();
 void yyerror(char *s);
+extern char* yytext;
+extern int yylineno;
 %}
 
-%token PRINT OUTPUT PLAY WHILE IF ELSE EQ GE LE GT LT PLUS MINUS MUL DIV OR AND LPAREN RPAREN READ FROM TO RCUT LCUT INSERT AT IDENTIFIER NUMBER STRING SPECIAL_CHAR
+%token PRINT OUTPUT PLAY WHILE IF ELSE EQ GT LT PLUS MINUS MUL DIV OR AND LPAREN RPAREN READ FROM TO RCUT LCUT INSERT AT IDENTIFIER NUMBER STRING END WHITESPACE COMMA SOURCE INT ASSIGN
+
 
 %%
 
@@ -14,7 +22,8 @@ program:
     ;
 
 block:
-    statement
+    /* Empty rule to allow for zero tests */
+    |block statement
     ;
 
 statement:
@@ -28,75 +37,88 @@ statement:
     ;
 
 varDeclaration:
-    'source' IDENTIFIER ('=' expression)?
-    | 'int' IDENTIFIER ('=' bool_exp)?
+    SOURCE IDENTIFIER ASSIGN expression END
+    | INT IDENTIFIER ASSIGN bool_exp END
+    | SOURCE IDENTIFIER END
+    | INT IDENTIFIER END
     ;
 
 assignment:
-    IDENTIFIER '=' (bool_exp | expression)
+    IDENTIFIER ASSIGN expression END
     ;
 
 print:
-    'print' '(' bool_exp ')' ';'
+    PRINT LPAREN expression RPAREN END
     ;
 
 output:
-    'output' '(' IDENTIFIER ',' STRING ')' ';'
+    OUTPUT LPAREN IDENTIFIER COMMA STRING RPAREN END
     ;
 
 play:
-    'play' expression
+    PLAY expression END
     ;
 
 while:
-    'while' '(' bool_exp ')' '{' block '}' ';'
+    WHILE LPAREN bool_exp RPAREN '{' block '}' END
     ;
 
 if:
-    'if' '(' bool_exp ')' '{' block '}' ('else' '{' block '}')? ';'
+    IF LPAREN bool_exp RPAREN '{' block '}' ELSE '{' block '}' END
+    | IF LPAREN bool_exp RPAREN '{' block '}' END
     ;
 
 bool_exp:
-    bool_term ('or' bool_term)*
+    bool_term OR bool_term
+    | bool_term
     ;
 
 bool_term:
-    rel_exp ('and' rel_exp)*
+    rel_exp AND rel_exp
+    | rel_exp
     ;
 
 rel_exp:
-    expression ('==' | '>' | '<') expression
+    expression EQ expression
+    | expression GT expression
+    | expression LT expression
     ;
 
 expression:
-    term ('+' | '-') term*
+    term PLUS term
+    | term MINUS term
+    | term
     ;
 
 term:
-    factor ('*' | '/') factor*
+    factor MUL factor
+    | factor DIV factor
+    | factor
     ;
 
 factor:
-    number
-    | string
+    NUMBER
+    | STRING
     | IDENTIFIER
-    | ('+' | '-' | 'not') factor
-    | '(' expression ')'
-    | READ '(' ')'
+    | PLUS factor
+    | MINUS factor
+    | "not" factor
+    | LPAREN expression RPAREN
+    | READ LPAREN RPAREN
     | identifier_operations
     ;
 
 identifier_operations:
-    IDENTIFIER ('from' expression 'to' expression)?
-    | IDENTIFIER ('rcut' expression)?
-    | IDENTIFIER ('lcut' expression)?
-    | IDENTIFIER ('insert' IDENTIFIER 'at' expression)?
+    IDENTIFIER FROM expression TO expression
+    | IDENTIFIER RCUT expression
+    | IDENTIFIER LCUT expression
+    | IDENTIFIER INSERT IDENTIFIER AT expression
     ;
 
 %%
 
 void yyerror(char *s) {
-    fprintf(stderr, "Error: %s\n", s);
+    fprintf(stderr, "Error: %s at line %d near '%s'\n", s, yylineno, yytext);
 }
 
 int main() {

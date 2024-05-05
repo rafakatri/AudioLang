@@ -1,11 +1,16 @@
 %{
 #include "parser.tab.h"
-extern int yylval;
+extern char* yytext;
+extern int yylineno;
 %}
 
 %%
 
 [ \t\n]+                   /* Ignore whitespace */
+"="                        {return ASSIGN; }
+"source"                   {return SOURCE; }
+"int"                      {return INT; }
+","                        {return COMMA; }
 "print"                    { return PRINT; }
 "output"                   { return OUTPUT; }
 "play"                     { return PLAY; }
@@ -13,8 +18,6 @@ extern int yylval;
 "if"                       { return IF; }
 "else"                     { return ELSE; }
 "=="                        { return EQ; }
-">="                       { return GE; }
-"<="                       { return LE; }
 ">"                        { return GT; }
 "<"                        { return LT; }
 "+"                        { return PLUS; }
@@ -32,9 +35,8 @@ extern int yylval;
 "lcut"                     { return LCUT; }
 "insert"                   { return INSERT; }
 "at"                       { return AT; }
+";"                        { return END; }
 [a-zA-Z_][a-zA-Z0-9_]*      { yylval.sval = strdup(yytext); return IDENTIFIER; }
 [0-9]+                     { yylval.ival = atoi(yytext); return NUMBER; }
-\"[^"]*\"                  { yylval.sval = strdup(yytext+1, yytext+strlen(yytext)-1); return STRING; }
-[@#$%^&*()-=+[]{}|:,.<>?/~`] { return SPECIAL_CHAR; }
-
+\"[^"]*\"                 { yylval.sval = strdup(yytext+1); yylval.sval[strlen(yylval.sval)-1] = '\0'; return STRING; }
 %%
