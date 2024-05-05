@@ -13,13 +13,17 @@
 ```
 block = {statement};
 
-statement = ('\n'|assignment|print|while|if);
+statement = ('\n'|assignment|print|while|if|output|play|varDeclaration);
 
-assignment = identifier, '=', expression, ';';
+varDeclaration = ('source', identifier, (('=', expression)|)|'int', identifier, (('=', bool_exp)|)), ';';
 
-print = 'print', '(', expression, ')', ';';
+assignment = identifier, '=', (bool_exp|expression), ';';
+
+print = 'print', '(', bool_exp, ')', ';';
 
 output = 'output', '(', identifier, ',', string, ')',';';
+
+play = 'play', expression, ';';
 
 while = 'while', '(', bool_exp, ')', '{', {statement}, '}', ';';
 
@@ -29,17 +33,17 @@ bool_exp = bool_term, { ( 'or' ) , bool_term };
 
 bool_term = rel_exp, { ( 'and' ) , rel_exp };
 
-rel_exp = expression, { ( '+' | '-' ) , expression };
+rel_exp = expression, { ( '==' | '>'|'<' ) , expression };
 
 expression = term, { ( '+' | '-' ) , term };
 
 term = { factor, ( '*' | '/' ) }, factor;
 
-factor = number | string | identifier | ('+'| '-'|'not'), factor | ('(', expression, ')')| ('read', '(', ')') | array_access ;
+factor = number | string | identifier | ('+'| '-'|'not'), factor | ('(', expression, ')')| ('read', '(', ')')|identifier_operations ;
 
-array_access = identifier, '[', expression, ']';
+identifier = (letter | '_'), {letter | digit | '_'};
 
-identifier = letter, {(letter | digit | '_')};
+identifier_operations = identifier, {('from', expression, 'to', expression)| ('rcut', expression)| ('lcut', expression)| ('insert', identifier, 'at', expression)};
 
 letter = 'a' | '...' | 'Z';
 
@@ -51,5 +55,5 @@ string = '"', { character }, '"';
 
 character = letter | digit | special_character;
 
-special_character = '!' | '@' | '...';
+special_character = '!' | '@' | '#' | '$' | '%' | '^' | '&' | '*' | '(' | ')' | '-' | '_' | '+' | '=' | '[' | ']' | '{' | '}' | '|' | ':' | ';' | '<' | ',' | '.' | '>' | '?' | '/' | '`' | '~';
 ```
