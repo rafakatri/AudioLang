@@ -38,9 +38,9 @@ python main.py ./programa.au
   
 * output: realiza download do áudio
 
-* Operações de soma entre áudios combinam os dois
+* operações de soma entre áudios combinam os dois
 
-* multiplicação de áudio por inteiros fazem o áudio repetir 
+* multiplicação de áudio por inteiros faz o áudio se repetir 
 
 * audio from x to y: retorna trecho do audio de x até y milisegundos
 
