@@ -4,11 +4,56 @@
 
 ### Descrição
 
-* Edite arquivos de áudio, como MP3 e WAV
+* Edite arquivos de áudio MP3 
 
 * Faça cortes e misture áudios diferentes
 
-### EBNF
+* Casos de uso: soundboard, cortes de áudio
+
+## Guia de Instalação
+
+* Dependências: ffmpeg e pydub
+
+```
+pip install pydub
+sudo apt update && sudo apt upgrade
+sudo apt install ffmpeg
+```
+
+## Guia de uso
+
+* Execute o arquivo main.py do diretório "compiler" com o path do programa a ser executado
+  
+* Programas de exemplo usam a extensão .au mas qualquer extensão funciona
+
+* No momento, apenas arquivos .mp3 funcionam na linguagem como fontes de áudio
+
+```
+python main.py ./programa.au
+```  
+
+## Features de áudio
+
+* play: tocar o áudio
+  
+* output: realiza download do áudio
+
+* Operações de soma entre áudios combinam os dois
+
+* multiplicação de áudio por inteiros fazem o áudio repetir 
+
+* audio from x to y: retorna trecho do audio de x até y milisegundos
+
+* audio rcut x: retorna trecho de áudio do início até x milisegundos
+
+* audio lcut x: retorna trecho de áudio de x milisegundos até o final
+
+* audio1 insert audio2 at x: insere o audio2 dentro de audio1 no instante de x milisegundos (atalho para audio1 rcut x  + audio2 + audio lcut x)
+
+### Para resolver dúvidas consulte os programas de exemplo
+
+
+## EBNF
 
 ```
 block = {statement};
