@@ -1,0 +1,25 @@
+
+source cavalo;
+cavalo = "cavalo.mp3";
+source tome = "tome.mp3";
+
+--source cavalo_modificado = "cavalo_modificado.mp3";
+
+int i = 0;
+
+while (i < 2) {
+    i = i + 1;
+    cavalo = cavalo * i;
+    play cavalo;
+}
+
+
+if (i == 2) {
+    play tome;
+} else {
+    play cavalo;
+}
+
+--play cavalo_modificado;
+
+output(cavalo, "cavalo_modificado.mp3");

@@ -1,0 +1,12 @@
+
+source cavalo;
+cavalo = "cavalo.mp3";
+
+source tome = "tome.mp3";
+
+source ca = cavalo rcut 250;
+source valo = cavalo lcut 250;
+
+source o = cavalo lcut 550;
+
+play (cavalo insert cavalo at 250) + tome;
