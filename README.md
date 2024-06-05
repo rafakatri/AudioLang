@@ -50,7 +50,7 @@ python main.py ./programa.au
 
 * audio1 insert audio2 at x: insere o audio2 dentro de audio1 no instante de x milisegundos (atalho para audio1 rcut x  + audio2 + audio lcut x)
 
-### Para resolver dúvidas consulte os programas de exemplo
+### Para resolver dúvidas consulte os programas de exemplo e o vídeo que demonstra eles (examples.mp4)
 
 
 ## EBNF
